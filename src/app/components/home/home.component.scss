@@ -1,0 +1,21 @@
+.backdrop-img{
+    width: 100%;
+    height: 150px;
+}
+.movie-detail-wrapper{
+    margin-bottom: 25px;
+
+    mat-card{
+        padding: 0;
+    
+      .card-header{
+          .title{
+              height: 40px;
+              line-height: 18px;
+             display: block;
+             justify-content: center;
+             color: #333;
+          }
+      }
+    }
+}

@@ -1,0 +1,81 @@
+<div *ngIf="movie$ | async as movie"  class="main-wrapper">
+    <div class="row">
+        <div class="poster col-md-4">
+            <img  [src]="movie.poster" [alt]="movie.title" class="img-fluid">
+        </div>
+
+    <!-- details  -->
+
+    <section class="details col-md-8">
+        <header class="w-100 d-flex justify-content-between">
+            <p class="title">
+                {{movie.title}}
+            
+                <small>
+                    ({{movie.imdb_rating}})
+                </small>
+            </p>
+
+
+            <div class="rate-wrapper">
+                
+                <span *ngFor="let rate of movie.imdb_rating_Array" [class.text-warning]="rate.status" class="material-icons">
+                    star_rate
+                </span>
+
+            </div>
+
+            <!-- <button mat-icon-button [color]="warning" *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i" (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above"> -->
+                <!-- <mat-icon>
+
+                </mat-icon> -->
+              <!-- </button> -->
+        </header>
+
+        
+        <div class="desc">
+            <p class="main-details">
+                <span>
+                    {{movie.released_on | date}}
+                </span>
+                |
+                <span>
+                    {{movie.length}}
+                </span>
+
+                | 
+
+                <span>
+                    {{movie.director}}
+                </span>
+
+                 
+
+            </p>
+
+            <p class="cast">
+               <span class="title">
+                    cast : 
+               </span> 
+
+               <span *ngFor="let cast of movie.cast; last as last">
+                    {{cast}}
+                <small *ngIf="!last">,</small>
+               </span>
+            </p>
+
+            
+            <p class="desc">
+                <span class="title text-capitalize">
+                     movie description : 
+                </span> 
+ 
+                <span>
+                    {{movie.overview}}
+                </span>
+             </p>
+        </div>
+    </section>
+</div>
+    
+</div>

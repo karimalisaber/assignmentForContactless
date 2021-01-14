@@ -1,0 +1,29 @@
+<!-- movies with categories -->
+<ng-container *ngIf="moviesService.categoredMovies$ | async as categoredMovies">
+    <ng-container *ngIf="categoredMovies && categoredMovies.length; else noData">   
+      <section *ngFor="let categoredMovie of categoredMovies">
+          <h2>{{categoredMovie.category}}</h2>
+          <div class="row">
+            <div *ngFor="let movie of categoredMovie.movies" class="movie-detail-wrapper col-md-3">
+              <mat-card>
+                <div class="card-header">
+                  <a class="title" [routerLink]="'specific-movie/' + movie.id">{{movie.title}}</a>
+                </div>
+      
+                
+                <img class="backdrop-img" [src]="movie.backdrop" [alt]="movie.title">
+                
+              </mat-card>
+            </div>
+          </div>
+      </section>
+  </ng-container>
+</ng-container>
+ 
+<!-- no Data  -->
+
+<ng-template #noData>
+  <h1 class="text-center bg-warning mt-5 p-1">
+    No Movies Found
+  </h1>
+</ng-template>
