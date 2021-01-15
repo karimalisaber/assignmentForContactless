@@ -13,6 +13,9 @@ export class MoviesService {
   searchText = '';
   private movieSearchSubject = new BehaviorSubject <string>('');
   movieSearchAction = this.movieSearchSubject.asObservable().pipe(debounceTime(500));  
+
+
+  cachedMovies: Movie[];
   
   categoredMovies$ : Observable< CategoredMovies[]> = combineLatest([this.movies$,this.movieSearchAction])
     .pipe(map(([categoriedMovies, searchText])=>{
@@ -31,8 +34,11 @@ export class MoviesService {
 
   
   get movies$() : Observable<Movie[]> {
-   return this.http.get(this.baseUrl + this.searchText).pipe(
+    if(this.cachedMovies && !this.searchText){
+      return of(this.cachedMovies)
+    }
 
+   return this.http.get(this.baseUrl + this.searchText).pipe(
     tap(()=>this.layoutService.blockUI(true)),
     finalize(()=>this.layoutService.blockUI(false)), 
     
@@ -44,8 +50,8 @@ export class MoviesService {
          };
        })
         return res.movies
-    },catchError(this.handleGetMoviesError))
-    );
+    }),
+    catchError(this.handleGetMoviesError));
   }
 
   handleGetMoviesError(){
@@ -84,6 +90,13 @@ export class MoviesService {
 
   // : Observable<Movie>
   getSpecificMovie(id): Observable<Movie>{
-    return this.movies$.pipe(map(res=> res.find(res=>res.id ===id)))
+    if(!this.cachedMovies){
+      this.movies$.subscribe(movies=>{
+        this.cachedMovies = movies;
+      })
+      return this.movies$.pipe( map(res=> res.find(res=>res.id ===id)))
+    }else{
+      return of(this.cachedMovies).pipe( map(res=> res.find(res=>res.id ===id)))
+    }
   }
 }
